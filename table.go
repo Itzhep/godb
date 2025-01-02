@@ -15,6 +15,7 @@ const (
     TypeInteger ColumnType = "INTEGER"
     TypeFloat   ColumnType = "FLOAT"
     TypeBoolean ColumnType = "BOOLEAN"
+    TypeBlob    ColumnType = "BLOB"  // Add BLOB type
 )
 
 type Column struct {
@@ -191,7 +192,7 @@ func (t *Table) generateCacheKey(conditions map[string]interface{}) string {
 
 func isValidColumnType(ct ColumnType) bool {
     switch ct {
-    case TypeString, TypeInteger, TypeFloat, TypeBoolean:
+    case TypeString, TypeInteger, TypeFloat, TypeBoolean, TypeBlob:
         return true
     default:
         return false
@@ -212,6 +213,9 @@ func isValidType(value interface{}, expectedType ColumnType) bool {
     case TypeBoolean:
         _, ok := value.(bool)
         return ok
+    case TypeBlob:
+        _, ok := value.([]byte)
+        return ok
     default:
         return false
     }
@@ -227,6 +231,8 @@ func convertStringToType(value string, colType ColumnType) (interface{}, error) 
         return strconv.ParseFloat(value, 64)
     case TypeBoolean:
         return strconv.ParseBool(value)
+    case TypeBlob:
+        return []byte(value), nil // Convert string to byte slice for BLOB
     default:
         return nil, fmt.Errorf("unsupported type: %s", colType)
     }

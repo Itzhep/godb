@@ -18,6 +18,7 @@ High-performance embedded database engine in Go featuring B-tree indexing and LR
 - INTEGER
 - FLOAT
 - BOOLEAN
+- BLOB
 
 ### Constraints
 - PRIMARY KEY
